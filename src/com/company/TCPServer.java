@@ -13,8 +13,8 @@ public class TCPServer {
             System.out.println("Server in sending mode…..");
 
             //Sending data to clients
-            sendDataToClient1(server, 9000, 8001, "Send request data to client1...", "Waiting for response from client1...");
-            sendDataToClient1(server, 9002, 8003, "Send request data to client2...", "Waiting for response from client2...");
+            sendDataToClient(server, 9000, 8001, "Send request data to client1...", "Waiting for response from client1...");
+            sendDataToClient(server, 9002, 8003, "Send request data to client2...", "Waiting for response from client2...");
 
             //Sending the result to clients
             sendResult(server, 9000);
@@ -33,7 +33,7 @@ public class TCPServer {
         }
     }
 
-    private static void sendDataToClient1(Server server, int sendPort, int receivingPort, String sendMessage, String waitingMessage) {
+    private static void sendDataToClient(Server server, int sendPort, int receivingPort, String sendMessage, String waitingMessage) {
         try {
             BufferedReader bufferedReader;
             server.setSendPort(sendPort);

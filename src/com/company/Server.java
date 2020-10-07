@@ -7,8 +7,8 @@ import java.net.InetAddress;
 public class Server {
     private InetAddress localHost;
     private int sendPort, recPort;
-    private int ssend = 0;
-    private int scounter = 0;
+    private int send = 0;
+    private int counter = 0;
     private DatagramSocket datagramSocket = null;
     private DatagramPacket datagramPacket = null;
     private String data = "";
@@ -26,14 +26,14 @@ public class Server {
     }
 
     public void sendData() throws Exception {
-        if (scounter < 2 && ssend < 2) {
+        if (counter < 2 && send < 2) {
             data = "VOTE_REQUEST";
         }
-        if (scounter < 2 && ssend > 1) {
+        if (counter < 2 && send > 1) {
             data = "GLOBAL_ABORT";
             data = data + " TRANSACTION ABORTED";
         }
-        if (scounter == 2 && ssend > 1) {
+        if (counter == 2 && send > 1) {
             data = "GLOBAL_COMMIT";
             data = data + " TRANSACTION COMMITTED";
         }
@@ -41,7 +41,7 @@ public class Server {
         datagramPacket = new DatagramPacket(data.getBytes(), data.length(), localHost, sendPort - 1000);
         datagramSocket.send(datagramPacket);
         datagramSocket.close();
-        ssend++;
+        send++;
     }
 
     public void recData() {
@@ -57,8 +57,8 @@ public class Server {
         data = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
         System.out.println("String = " + data);
         if (data.equalsIgnoreCase("VOTE_COMMIT")) {
-            scounter++;
+            counter++;
         }
-        System.out.println("Counter value = " + scounter + "\n Send value = " + ssend);
+        System.out.println("Counter value = " + counter + "\n Send value = " + send);
     }
 }

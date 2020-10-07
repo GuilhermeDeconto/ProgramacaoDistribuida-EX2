@@ -5,10 +5,13 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class Server {
-    InetAddress localHost;
-    int sendPort, recPort;
-    int ssend = 0;
-    int scounter = 0;
+    private InetAddress localHost;
+    private int sendPort, recPort;
+    private int ssend = 0;
+    private int scounter = 0;
+    private DatagramSocket datagramSocket = null;
+    private DatagramPacket datagramPacket = null;
+    private String data = "";
 
     Server(InetAddress localHost) {
         this.localHost = localHost;
@@ -23,9 +26,6 @@ public class Server {
     }
 
     public void sendData() throws Exception {
-        DatagramSocket datagramSocket;
-        DatagramPacket datagramPacket;
-        String data = "";
         if (scounter < 2 && ssend < 2) {
             data = "VOTE_REQUEST";
         }
@@ -46,9 +46,6 @@ public class Server {
 
     public void recData() {
         byte[] buf = new byte[256];
-        DatagramPacket datagramPacket = null;
-        DatagramSocket datagramSocket = null;
-        String msgStr = "";
         try {
             datagramSocket = new DatagramSocket(recPort);
             datagramPacket = new DatagramPacket(buf, buf.length);
@@ -57,11 +54,11 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        msgStr = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
-        System.out.println("String = " + msgStr);
-        if (msgStr.equalsIgnoreCase("VOTE_COMMIT")) {
+        data = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
+        System.out.println("String = " + data);
+        if (data.equalsIgnoreCase("VOTE_COMMIT")) {
             scounter++;
         }
-        System.out.println("Counter value = " + scounter + "n Send value = " + ssend);
+        System.out.println("Counter value = " + scounter + "\n Send value = " + ssend);
     }
 }

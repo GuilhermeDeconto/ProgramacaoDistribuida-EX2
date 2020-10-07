@@ -9,6 +9,9 @@ import java.net.InetAddress;
 public class Client {
     InetAddress localHost;
     int sendPort, recPort;
+    private DatagramSocket datagramSocket;
+    private DatagramPacket datagramPacket;
+    private String data = "";
 
     Client(InetAddress localHost) {
         this.localHost = localHost;
@@ -23,29 +26,23 @@ public class Client {
     }
 
     public void sendData() throws Exception {
-        BufferedReader br;
-        DatagramSocket ds;
-        DatagramPacket dp;
-        String data = "";
         System.out.println("Enter the Response 'VOTE_COMMIT' || 'VOTE_ABORT' ");
-        br = new BufferedReader(new InputStreamReader(System.in));
-        data = br.readLine();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        data = bufferedReader.readLine();
         System.out.println("Data is " + data);
-        ds = new DatagramSocket(sendPort);
-        dp = new DatagramPacket(data.getBytes(), data.length(), localHost, sendPort - 1000);
-        ds.send(dp);
-        ds.close();
+        datagramSocket = new DatagramSocket(sendPort);
+        datagramPacket = new DatagramPacket(data.getBytes(), data.length(), localHost, sendPort - 1000);
+        datagramSocket.send(datagramPacket);
+        datagramSocket.close();
     }
 
     public void recData() throws Exception {
         byte[] buf = new byte[256];
-        DatagramPacket datagramPacket;
-        DatagramSocket datagramSocket;
         datagramSocket = new DatagramSocket(recPort);
         datagramPacket = new DatagramPacket(buf, buf.length);
         datagramSocket.receive(datagramPacket);
         datagramSocket.close();
-        String msgStr = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
-        System.out.println("Client1 data " + msgStr);
+        data = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
+        System.out.println("Client1 data " + data);
     }
 }

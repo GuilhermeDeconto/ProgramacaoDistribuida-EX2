@@ -7,8 +7,8 @@ public class TCPClient1 {
         InetAddress localHost;
         localHost = InetAddress.getLocalHost();
         Client client = new Client(localHost);
-        client.setSendPort(9001);  //recport=8000
-        client.setRecPort(8000);  //sendport=9001
+        client.setSendPort(9001);
+        client.setRecPort(8000);
         client.recData();
         client.sendData();
         client.recData();
